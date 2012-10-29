@@ -18,3 +18,8 @@ func main() {
      proxy.Serve()
 }
 ```
+
+```sh
+
+curl -x localhost:8090 http://techcrunch.com/
+```
