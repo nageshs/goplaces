@@ -2,7 +2,7 @@ package proxy
 
 import ("fmt"
 	"net/http"
-	"io/ioutil"
+	"io"
 )
 
 
@@ -37,8 +37,6 @@ func (h ProxyServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	defer resp.Body.Close()
-	// todo: use streaming read/write to avoid mem copy
-	body, err := ioutil.ReadAll(resp.Body)
 
 	for k,v := range resp.Header {
 		for _, d := range v {
@@ -47,13 +45,16 @@ func (h ProxyServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	
 	w.WriteHeader(resp.StatusCode)
+	count, err := io.Copy(w, resp.Body)
 
-	o, err := w.Write(body)
+	// following can both be in a defer func
 	if err != nil {
-		fmt.Println("Error writing to client")
+		// fmt.Printf("Error writing to client %s \n", err)
+		fmt.Printf("%s\t%s\t%d\t%d\n", r.URL.String(), r.Method, resp.StatusCode, 0)
 		return
 	}
-	fmt.Printf("Served '%s', wrote %d bytes\n", r.URL.String(), o)
+
+	fmt.Printf("%s\t%s\t%d\t%d\n", r.URL.String(), r.Method, resp.StatusCode, count)
 }
 
 func Serve() {
