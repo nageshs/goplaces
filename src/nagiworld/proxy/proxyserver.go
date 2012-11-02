@@ -22,11 +22,13 @@ func (h ProxyServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	copyHeaders(r.Header, req.Header)
+
 	// make the request
 	resp, err := client.Do(req)
 
 	if err != nil {
 		fmt.Fprintf(w, "Error %s", err)
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
@@ -37,7 +39,6 @@ func (h ProxyServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(resp.StatusCode)
 	count, err := io.Copy(w, resp.Body)
 
-	// following can both be in a defer func
 	if err != nil {
 		// fmt.Printf("Error writing to client %s \n", err)
 		fmt.Printf("%s\t%s\t%d\t%d\n", r.URL.String(), r.Method, resp.StatusCode, 0)
@@ -56,6 +57,7 @@ func copyHeaders(from http.Header, to http.Header) {
 	}
 }
 
+// Takes the port number the proxy server should start on. 
 func Serve(port int) {
 	var h ProxyServer
 	fmt.Printf("Starting server on localhost:%s ...\n", strconv.Itoa(port))
