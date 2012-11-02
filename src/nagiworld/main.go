@@ -3,5 +3,5 @@ package main
 import "nagiworld/proxy"
 
 func main() {
-	proxy.Serve()
+	proxy.Serve(8090)
 }

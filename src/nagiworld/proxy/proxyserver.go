@@ -1,10 +1,11 @@
 package proxy
 
-import ("fmt"
-	"net/http"
+import (
+	"fmt"
 	"io"
+	"net/http"
+	"strconv"
 )
-
 
 // server code 
 type ProxyServer struct {
@@ -20,14 +21,7 @@ func (h ProxyServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Error %s", err)
 		return
 	}
-	// Add the headers 
-	for k, v := range r.Header {
-		if k != "ProxyConnection" {
-			for _, d := range v {
-				req.Header.Add(k, d)
-			}
-		}
-	}
+	copyHeaders(r.Header, req.Header)
 	// make the request
 	resp, err := client.Do(req)
 
@@ -38,12 +32,8 @@ func (h ProxyServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	defer resp.Body.Close()
 
-	for k,v := range resp.Header {
-		for _, d := range v {
-			w.Header().Add(k, d)
-		}
-	}
-	
+	copyHeaders(resp.Header, w.Header())
+
 	w.WriteHeader(resp.StatusCode)
 	count, err := io.Copy(w, resp.Body)
 
@@ -57,7 +47,20 @@ func (h ProxyServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("%s\t%s\t%d\t%d\n", r.URL.String(), r.Method, resp.StatusCode, count)
 }
 
-func Serve() {
+// utility method to copy header from source to destination
+func copyHeaders(from http.Header, to http.Header) {
+	for k, v := range from {
+		for _, d := range v {
+			to.Add(k, d)
+		}
+	}
+}
+
+func Serve(port int) {
 	var h ProxyServer
-	http.ListenAndServe("localhost:8090", h)
+	fmt.Printf("Starting server on localhost:%s ...\n", strconv.Itoa(port))
+	err := http.ListenAndServe("localhost:"+strconv.Itoa(port), h)
+	if err != nil {
+		fmt.Printf(" Error %s \n", err)
+	}
 }
