@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"strconv"
+	"log"
 )
 
 // server code 
@@ -64,5 +65,6 @@ func Serve(port int) {
 	err := http.ListenAndServe("localhost:"+strconv.Itoa(port), h)
 	if err != nil {
 		fmt.Printf(" Error %s \n", err)
+		log.Fatal(err)
 	}
 }
