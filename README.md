@@ -14,8 +14,8 @@ Usage
 import  "nagiworld/proxy"
 
 func main() {
-     // starts  proxy ol  starts proxy server on localhost:8090
-     proxy.Serve()
+     // starts proxy server on localhost:<port>
+     proxy.Serve(8090)
 }
 ```
 
