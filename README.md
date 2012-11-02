@@ -40,3 +40,7 @@ All thats needed is to provide a __func_(r *http.Request)__ and returns the data
 
  RegisterHandler("/foo", fooHandler)
 ```
+
+Running
+==========
+To run the json server you can issue __go run jsonServer.go__
