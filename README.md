@@ -26,7 +26,7 @@ curl -x localhost:8090 http://techcrunch.com/
 
 JsonServer Usage:
 =================
-The json server is an abstraction for letting users write handlers which take in the request and return any json object which is then send down the wire to the client. 
+The json server abstracts out all the http handler interface to present a simple __func__ that   can look at the request and return any json object. The server handles the http headers/marshalling for you.
 
 All thats needed is to provide a __func_(r *http.Request)__ and returns the data as a json struct
 
