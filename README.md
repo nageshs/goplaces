@@ -31,10 +31,10 @@ The json server abstracts out all the http handler interface to present a simple
 All thats needed is to provide a __func_(r *http.Request)__ and returns the data as a json struct
 
 ```go
-	fooHandler := func(r *http.Request) (interface{}, error) {
-              //  Look into the request and return a struct 
-              return &Employee{ID: 2, Name:"foo", Age:20, Salary:500}
-	}
+fooHandler := func(r *http.Request) (interface{}, error) {
+      //  Look into the request and return a struct 
+      return &Employee{ID: 2, Name:"foo", Age:20, Salary:500}
+}
 
  // Once created we then register it with the handler 
 
@@ -43,4 +43,16 @@ All thats needed is to provide a __func_(r *http.Request)__ and returns the data
 
 Running
 ==========
-To run the json server you can issue __go run jsonServer.go__
+To run the json server you can issue __go run jsonServer.go__. By default the server runs on port 8080. To see the json output, run the following curl cmd.
+
+```sh 
+curl -v http://localhost:8080/baz/123
+```
+
+OR 
+
+```sh
+curl -v http://localhost:8080/foo
+```
+
+
