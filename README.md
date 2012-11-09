@@ -31,6 +31,9 @@ The json server abstracts out all the http handler interface to present a simple
 All thats needed is to provide a __func_(r *http.Request)__ and returns the data as a json struct
 
 ```go
+
+import "nagiworld/jsonserver"
+
 fooHandler := func(r *http.Request) (interface{}, error) {
       //  Look into the request and return a struct 
       return &Employee{ID: 2, Name:"foo", Age:20, Salary:500}
@@ -38,7 +41,7 @@ fooHandler := func(r *http.Request) (interface{}, error) {
 
  // Once created we then register it with the handler 
 
- RegisterHandler("/foo", fooHandler)
+jsonserver.RegisterHandler("/foo", fooHandler)
 ```
 
 Running
