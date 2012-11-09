@@ -39,14 +39,17 @@ fooHandler := func(r *http.Request) (interface{}, error) {
       return &Employee{ID: 2, Name:"foo", Age:20, Salary:500}
 }
 
- // Once created we then register it with the handler 
-
-jsonserver.RegisterHandler("/foo", fooHandler)
+....
+func main() {
+     // Once created we then register it with the handler 
+     jsonserver.RegisterHandler("/foo", fooHandler)
+     jsonserver.StartServer("localhost", 8080)
+}
 ```
 
 Running
 ==========
-To run the json server you can issue __go run jsonServer.go__. By default the server runs on port 8080. To see the json output, run the following curl cmd.
+To run the json server you can issue __go run jServer.go__. By default the server runs on port 8080. To see the json output, run the following curl cmd.
 
 ```sh 
 curl -v http://localhost:8080/baz/123
