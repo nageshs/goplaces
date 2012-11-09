@@ -60,9 +60,9 @@ func copyHeaders(from http.Header, to http.Header) {
 
 // Takes the port number the proxy server should start on. 
 func Serve(port int) {
-	var h ProxyServer
+	var server ProxyServer
 	fmt.Printf("Starting server on localhost:%s ...\n", strconv.Itoa(port))
-	err := http.ListenAndServe("localhost:"+strconv.Itoa(port), h)
+	err := http.ListenAndServe("localhost:"+strconv.Itoa(port), server)
 	if err != nil {
 		fmt.Printf(" Error %s \n", err)
 		log.Fatal(err)
